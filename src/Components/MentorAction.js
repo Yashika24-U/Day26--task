@@ -1,8 +1,8 @@
 
 import { FormGroup,Label,Input,Container, Button } from "reactstrap"
-import { useEffect, useState } from "react"
+ import { useEffect, useState } from "react"
 import { useNavigate,useParams } from "react-router-dom";
-export default function MentorAction()
+export default function ActionStud()
 {
 const{id} = useParams();
 const nav = useNavigate();
@@ -24,6 +24,19 @@ const handleChange = (e)=>{
     setFormData({...formData,[e.target.name]: e.target.value})    
 }
 const handleSubmit = ()=>{
+    if(id)
+    {
+    fetch('https://64befda55ee688b6250d1598.mockapi.io/Products/'+ id ,{
+     method : "PUT",
+     headers : {
+        "Content-type":"application/json",
+     },
+     body : JSON.stringify(formData)  
+    })
+    .then((data)=>data.json())
+    .then(()=>nav("/student"))
+
+    }else{
     fetch('https://64befda55ee688b6250d1598.mockapi.io/Products' ,{
      method : "POST",
      headers : {
@@ -33,6 +46,7 @@ const handleSubmit = ()=>{
     })
     .then((data)=>data.json())
     .then(()=>nav("/student"))
+}
 } 
 return(
     <Container className="mt-4">

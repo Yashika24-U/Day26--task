@@ -4,12 +4,30 @@ import { useNavigate } from 'react-router-dom'
 
 export default function Mentor() {
 const nav = useNavigate();
+const [data,setData] = useState([])
+const[isDelete,setIsDelete] = useState(false)
   
 const [state,setState] = useState([])
 
 useEffect(()=>{
   output();
 },[])
+
+
+useEffect(()=>{
+  fetch('https://64befda55ee688b6250d1598.mockapi.io/Products')
+  .then((data)=>data.json())
+  .then((res)=>setData(res))
+},[isDelete])
+
+const handleDelete = (id)=>{
+fetch('https://64befda55ee688b6250d1598.mockapi.io/Products/' + id,{
+method :"DELETE"
+}).then((data)=>data.json())
+.then((res)=>setIsDelete(!isDelete));
+
+}
+
 
  async function output(){
     const req = await fetch('https://64befda55ee688b6250d1598.mockapi.io/Products')
@@ -39,8 +57,8 @@ return(
           <tr key = {i}>
             <td>{ele.name}</td>
             <td>
-              <Button color = "warning">Edit</Button>
-              <Button color = "danger">Delete</Button>
+              <Button color = "warning" onClick = {()=>nav("/actionstud/" + ele.id)}>Edit</Button>
+              <Button color = "danger"  onClick = {()=>{handleDelete(ele.id)}}>Delete</Button>
             </td>
           </tr>
         )
